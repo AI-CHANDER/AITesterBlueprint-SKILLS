@@ -2,40 +2,21 @@
 
 > **Status:** DRAFT — pending human review
 > **Source ticket:** [KAN-3](https://jiracshekher007.atlassian.net/browse/KAN-3) (AI_QA project)
-> **Generated from:** the actual KAN-3 ticket fetched from JIRA (2026-08-14)
-> **Note:** Test cases below are derived **only** from the KAN-3 ticket content (summary + description) and the skill's requirement checklist. Where the ticket is silent, the gap is flagged as a question for the author — nothing is fabricated.
+> **Generated from:** the actual KAN-3 ticket fetched from JIRA (2026-08-17)
+> **Method:** 02-test-case-generator skill — requirement gap analysis + test case drafting, with the **hallucination rule** applied
+> **Author:** Test Case Generator (skill)
+> **Note:** Test cases below are derived **only** from the KAN-3 ticket content (summary + description) and the skill's requirement checklist. Where the ticket is silent, the gap is flagged as a question for the author — **nothing is fabricated, invented, or assumed as fact.**
 
 ---
 
-## 1. Document Information
+## 1. Scope & Objectives
 
-| Field | Value |
-|---|---|
-| Project Name | AI_QA |
-| Ticket | KAN-3 — Create test cases for login functionality and SRS document |
-| Ticket Type | Task |
-| Priority | Medium |
-| Status | To Do |
-| Document Version | 0.1 (Draft) |
-| Author | Test Case Generator (skill) |
-| Reviewer | TBD |
-| Approval Date | TBD |
-| Product/Application | Not stated in the ticket (TBD) |
-
----
-
-## 2. Objective
-
-Deliver two artifacts for KAN-3:
+**Objective:** Deliver two artifacts for KAN-3:
 
 1. **Test cases for the login functionality** — a traceable, review-ready set of test cases covering the login module described in the ticket.
 2. **SRS (Software Requirements Specification) document** — verification support: test cases that check the SRS document itself for completeness, clarity, and testability.
 
----
-
-## 3. Scope
-
-### In Scope
+**In Scope**
 
 - Functional test cases for the login module (per ticket description)
 - Boundary and empty-state test cases
@@ -43,12 +24,91 @@ Deliver two artifacts for KAN-3:
 - SRS document review/verification test cases
 - Traceability to requirements (RTM)
 
-### Out of Scope
+**Out of Scope**
 
 - Automation script implementation (test case design only)
 - Performance / load testing
 - Penetration testing
 - Non-login features (post-login modules are only referenced as context)
+
+---
+
+## 2. Hallucination Rule Compliance
+
+> The skill guardrails require: **do not invent ticket content**, **never fabricate acceptance criteria**, **keep scenarios traceable**, **use only the ticket and the skill's own references**. This section documents how each rule was applied.
+
+| # | Hallucination Rule (from skill) | How it was applied in this document |
+|---|---|---|
+| 1 | Do not invent ticket content | Ticket summary + description were fetched live from JIRA (KAN-3, 2026-08-17). No requirement, page element, or post-login feature was added beyond what the ticket states. |
+| 2 | Never fabricate acceptance criteria | The ticket has **no acceptance criteria**. This is recorded as a finding (Section 3 gap note), and test expectations are framed as "verify …" behaviors derived from the description — never presented as the ticket's ACs. |
+| 3 | Keep scenarios traceable | Every test case has a **Maps To** column pointing to R1, R2, R3 (ticket statements) or an explicit gap (e.g. "Gap: boundary/error"). No orphan scenarios. |
+| 4 | Only use ticket + skill references | No external sources, other skills, or prior documents were consulted for content. Where test data/environment is unknown, it is marked **TBD** and listed as an open question — never guessed. |
+| 5 | Never mark as final | Status is **DRAFT**; the Human Review Gate (Section 10) is mandatory before any execution or automation. |
+| 6 | A missing AC is a finding, not a blank to fill | The missing acceptance criteria are surfaced as a blocking open question, not silently filled in. |
+
+---
+
+## 3. Gaps & Questions for the Author
+
+Gap analysis performed with the skill's requirement checklist (✅ present · ⚠️ ambiguous · ❌ missing).
+
+### Functional
+
+| Checklist item | Status | Finding |
+|---|---|---|
+| Clear user story / goal | ⚠️ | Ticket states the login module's purpose but no "As a … I want … so that …" user story |
+| Acceptance criteria are testable | ❌ | **No acceptance criteria** in the ticket at all |
+| Happy path fully described | ⚠️ | "Registered users securely authenticate" — but no target URL or credential format |
+| Negative / error paths described | ⚠️ | Not described in the ticket; derived by analysis (invalid/unregistered/disabled accounts) |
+| Boundary & empty states (0, 1, max, empty) | ❌ | Not specified — no min/max length or empty-state behavior stated |
+| State transitions / workflow steps enumerated | ⚠️ | Post-login feature list given; login flow steps not enumerated |
+
+### Data & Environment
+
+| Checklist item | Status | Finding |
+|---|---|---|
+| Required test data specified or derivable | ❌ | **No test credentials** — valid/invalid identifiers and passwords all TBD |
+| Environment / config / feature flags named | ❌ | No environment, browser, or feature-flag info |
+| External dependencies & integrations listed | ⚠️ | Post-login functions imply integrations (payment, delivery); none named |
+| Preconditions / setup stated | ❌ | Not stated |
+
+### Non-functional
+
+| Checklist item | Status | Finding |
+|---|---|---|
+| Performance / load expectations | ❌ | Not stated |
+| Security / authorization | ⚠️ | "Securely authenticate" is stated; no roles, lockout, or session policy defined |
+| Accessibility (a11y) expectations | ❌ | Not stated |
+| Internationalization / localization | ❌ | Not stated |
+| Audit / logging / observability | ❌ | Not stated |
+
+### Cross-cutting
+
+| Checklist item | Status | Finding |
+|---|---|---|
+| Impact on existing features (regression surface) | ⚠️ | 8 post-login modules referenced; regression scope not defined |
+| Backward compatibility / migration | ❌ | Not applicable / not stated |
+| Mobile / responsive / browser matrix | ❌ | Not stated |
+| Rollback / feature-flag behavior | ❌ | Not stated |
+
+### Clarity
+
+| Checklist item | Status | Finding |
+|---|---|---|
+| No ambiguous wording ("should", "etc.") | ⚠️ | "as applicable" and "if supported" leave element scope open |
+| Terms defined consistently | ⚠️ | "identifier" (email/mobile/username) not pinned to one type |
+| Mockups / designs linked | ❌ | No designs or mockups linked |
+
+### Open questions for the ticket author (blocking)
+
+1. **Which application and login URL** do these test cases target? The ticket does not name the product/application.
+2. **What are the valid test credentials** (and where should they be stored)?
+3. What **exact error message text** is expected for invalid credentials (identifier vs password)?
+4. Is the identifier an **email, mobile number, or username** — and is it case-sensitive? What are the **min/max length** rules?
+5. Is there **CAPTCHA / 2FA / SSO** on login that must be handled or bypassed?
+6. Does the **SRS document already exist**, and where is it located? If not, is writing the SRS part of this ticket's scope?
+7. Which **browsers/platforms** must be supported?
+8. Should these test cases be **executed manually or automated**, and in which CI?
 
 ---
 
@@ -74,7 +134,7 @@ Deliver two artifacts for KAN-3:
 - Password visibility control
 - Remember Me option (if supported)
 
-> **Gap:** No acceptance criteria, target URL/environment, credential rules (identifier type, min/max length, case sensitivity), or expected error messages are specified in the ticket. These are flagged in Section 8.
+> **Gap (finding, per hallucination rule):** No acceptance criteria, target URL/environment, credential rules (identifier type, min/max length, case sensitivity), or expected error messages are specified in the ticket. These are flagged in Section 3 and **not fabricated**.
 
 ---
 
@@ -88,7 +148,7 @@ Deliver two artifacts for KAN-3:
 
 ---
 
-## 6. Test Cases
+## 6. Test Scenarios
 
 ### 6.1 Login Functionality — Test Cases
 
@@ -136,7 +196,7 @@ Deliver two artifacts for KAN-3:
 
 ## 7. Test Data & Environment
 
-### Test Data (all TBD — pending author confirmation)
+### Test Data (all TBD — pending author confirmation; nothing assumed)
 
 | Data | Value | Notes |
 |---|---|---|
@@ -159,7 +219,7 @@ Deliver two artifacts for KAN-3:
 
 ### Entry
 
-- KAN-3 requirements clarified (see open questions in Section 10)
+- KAN-3 requirements clarified (see open questions in Section 3)
 - Login page available at known URL
 - SRS document delivered
 - Valid test credentials provisioned
@@ -175,7 +235,7 @@ Deliver two artifacts for KAN-3:
 
 ## 9. Risks & Assumptions
 
-### Assumptions
+### Assumptions (explicitly flagged, never stated as fact)
 
 - A login page/module exists at a known URL (to be confirmed by the author).
 - Valid registered-user credentials will be provided externally.
@@ -225,3 +285,7 @@ Deliver two artifacts for KAN-3:
 - [ ] Confirm identifier type and field rules (case sensitivity, length limits)
 - [ ] Confirm SRS document availability/location
 - [ ] Approve test case scenarios (P0/P1/P2)
+
+---
+
+*Document created by the Test Case Generator skill for human review, with the hallucination rule applied. No credentials, tokens, or personal information are included.*
